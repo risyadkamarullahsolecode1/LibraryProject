@@ -9,6 +9,6 @@ namespace LibraryProject.Application.Interfaces
     public interface IUserService
     {
         Task AttachNotes(int id, string notes);
-        Task<byte[]> generatereportpdf(int id);
+        Task<byte[]> generatereportpdf();
     }
 }

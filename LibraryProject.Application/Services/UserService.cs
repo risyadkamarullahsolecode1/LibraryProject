@@ -39,25 +39,23 @@ namespace LibraryProject.Application.Services
             await _userRepository.SaveChangesAsync();
         }
 
-        public async Task<byte[]> generatereportpdf(int id)
+        public async Task<byte[]> generatereportpdf()
         {
-            var userList = await _userRepository.GetUserById(id);
+            var userList = await _userRepository.GetAllUser();
 
             string htmlcontent = String.Empty;
             htmlcontent += "<h1> User Report </h1>";
             htmlcontent += "<table>";
             htmlcontent += "<thead><tr><td>Id</td><td>Username</td><td>Position</td><td>Previllage</td><td>AppUserId</td></tr></thead>";
 
-            userList.(item => {
-                htmlcontent += "<tbody>";
+            userList.ToList().ForEach(item => {;
                 htmlcontent += "<tr>";
                 htmlcontent += "<td>" + item.Id + "</td>";
-                htmlcontent += "<td>" + item.FirstName +" "+ item.LastName + "</td>";
+                htmlcontent += "<td>" + item.FirstName + " " + item.LastName + "</td>";
                 htmlcontent += "<td>" + item.Position + "</td>";
                 htmlcontent += "<td>" + item.Previlege + "</td>";
                 htmlcontent += "<td>" + item.AppUserId + "</td>";
                 htmlcontent += "</tr>";
-                htmlcontent += "</tbody>";
             });
             htmlcontent += "</table>";
 

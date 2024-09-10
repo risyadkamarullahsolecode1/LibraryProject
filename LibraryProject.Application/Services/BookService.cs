@@ -49,6 +49,7 @@ namespace LibraryProject.Application.Services
             return await _bookRepository.GetTotalBooksAsync();
         }
 
+        // SRS-037 information book purchase
         public async Task<byte[]> generatereportpdf()
         {
             var bookList = await _bookRepository.GetAllBooks();
@@ -59,18 +60,17 @@ namespace LibraryProject.Application.Services
 
             htmlcontent += "<table>";
 
-            htmlcontent += "<thead><tr><td>Id</td><td>Title</td><td>Author</td><td>Publisher</td><td>ISBN</td></tr></thead>";
+            htmlcontent += "<thead><tr><td>Id</td><td>Title</td><td>Author</td><td>Publisher</td><td>Price</td><td>Category</td></tr></thead>";
 
             bookList.ToList().ForEach(item => {
-                htmlcontent += "<tbody>";
                 htmlcontent += "<tr>";
                 htmlcontent += "<td>" + item.Id + "</td>";
                 htmlcontent += "<td>" + item.Title + "</td>";
                 htmlcontent += "<td>" + item.Author + "</td>";
                 htmlcontent += "<td>" + item.Publisher + "</td>";
-                htmlcontent += "<td>" + item.Isbn + "</td>";
+                htmlcontent += "<td>" + item.Price + "</td>";
+                htmlcontent += "<td>" + item.Category + "</td>";
                 htmlcontent += "</tr>";
-                htmlcontent += "<tbody>"; ;
             });
 
             htmlcontent += "</table>";

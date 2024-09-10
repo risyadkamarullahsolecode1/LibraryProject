@@ -14,6 +14,5 @@ namespace LibraryProject.Domain.Interfaces
         Task AddBorrowRecord(BookBorrow borrowRecord);
         Task UpdateBorrowRecord(BookBorrow borrowRecord);
         Task DeleteBorrowRecord(BookBorrow borrowRecord);
-        Task<List<User>> GetMostActiveUser(string topN);
     }
 }

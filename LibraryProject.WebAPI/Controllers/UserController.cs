@@ -38,7 +38,7 @@ namespace LibraryProject.WebAPI.Controllers
             }
             return Ok(user);
         }
-
+        [Authorize(Roles ="Library Manager")]
         [HttpPost]
         public async Task<ActionResult<User>> AddUser(User user)
         {
@@ -86,12 +86,12 @@ namespace LibraryProject.WebAPI.Controllers
 
         [HttpGet("report")]
 
-        public async Task<IActionResult> Report(int id)
+        public async Task<IActionResult> Report()
 
         {
             var Filename = "UserReport.pdf";
 
-            var file = await _userService.generatereportpdf(id);
+            var file = await _userService.generatereportpdf();
 
             return File(file, "application/pdf", Filename);
 

@@ -20,7 +20,7 @@ namespace LibraryProject.WebAPI.Controllers
             _bookService = bookService;
         }
 
-        [Authorize(Roles = "User")]
+        [Authorize(Roles = "Library User")]
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Book>>> GetBooks()
         {
@@ -28,7 +28,7 @@ namespace LibraryProject.WebAPI.Controllers
             var bookDto = books.Select(b => b.ToBookDto()).ToList();
             return Ok(bookDto);
         }
-        [Authorize(Roles = "User")]
+        [Authorize(Roles = "Library User")]
         [HttpGet("{id}")]
         public async Task<ActionResult<Book>> GetBookById(int id)
         {
@@ -68,14 +68,14 @@ namespace LibraryProject.WebAPI.Controllers
             }
             return Ok("Buku telah dihapus");
         }
-        [Authorize(Roles = "User")]
+        [Authorize(Roles = "Library User")]
         [HttpGet("search-book")]
         public async Task<ActionResult<IEnumerable<Book>>> SearchBookAsync([FromQuery] QueryObject query, [FromQuery] Pagination pagination)
         {
             var querybook = await _bookRepository.SearchBookAsync(query, pagination);
             return Ok(querybook);
         }
-        [Authorize(Roles = "User")]
+        [Authorize(Roles = "Library User")]
         [HttpGet("search-book-language")]
         public async Task<ActionResult<IEnumerable<Book>>> SearchBookLanguage([FromQuery] string language)
         {
@@ -97,17 +97,11 @@ namespace LibraryProject.WebAPI.Controllers
         }
 
         [HttpGet("report")]
-
         public async Task<IActionResult> Report()
-
         {
-
             var Filename = "BookReport.pdf";
-
             var file = await _bookService.generatereportpdf();
-
             return File(file, "application/pdf", Filename);
-
         }
     }
 }

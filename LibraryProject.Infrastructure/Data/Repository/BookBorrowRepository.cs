@@ -48,14 +48,5 @@ namespace LibraryProject.Infrastructure.Data.Repository
             _context.BookBorrows.Update(borrow);
             await _context.SaveChangesAsync();
         }
-
-        public async Task<List<User>> GetMostActiveUser(string topN)
-        {
-            return _context.BookBorrows
-                .Where(u => u.AppUserId == topN)
-                .OrderByDescending(u => u.AppUserId.Count)
-                .Take(topN)
-                .ToListAsync();
-        }
     }
 }
