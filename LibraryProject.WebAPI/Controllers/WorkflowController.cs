@@ -22,7 +22,7 @@ namespace LibraryProject.WebAPI.Controllers
         public async Task<ActionResult> SubmitBookRequestAsync(BookRequest requestDto, string userId)
         {
             await _workflowRepository.SubmitBookRequestAsync(requestDto, userId);
-            return Ok("Book Request succecfully submitted");
+            return Ok("Book Request succesfully submitted");
         }
 
         [Authorize(Roles = "Librarian, Library Manager")]
@@ -45,6 +45,13 @@ namespace LibraryProject.WebAPI.Controllers
             {
                 return BadRequest(ex.Message);
             }
+        }
+
+        [HttpGet]
+        public async Task<ActionResult<IEnumerable<Process>>> GetProcess()
+        {
+            var result = await _workflowRepository.GetProcess();
+            return Ok(result);
         }
     }
 }

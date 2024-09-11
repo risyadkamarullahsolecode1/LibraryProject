@@ -176,7 +176,7 @@ namespace LibraryProject.Infrastructure.Data.Repository
                 {
                     ProcessId = processId,
                     StepId = isApproved ? nextStepId : 4, // Next step for HR if approved
-                    ActorId = isApproved ? "39a4340c-f28f-4b8f-80a5-af57e728ac7b" : actorId,
+                    ActorId = isApproved ? "dba97099-e473-4a05-ba33-ab666a5d5b24" : actorId,
                     Action = isApproved ? "Pending Library Manager Approval" : "Rejected by Librarian",
                     ActionDate = DateTime.UtcNow,
                     Comment = comment
@@ -247,9 +247,12 @@ namespace LibraryProject.Infrastructure.Data.Repository
             return user?.Email;
         }
 
-        public Task<Process> GetProcess()
+        public async Task<IEnumerable<Process>> GetProcess()
         {
-            return null; 
+           var processes = await _context.Processs
+                .ToListAsync();
+
+            return processes;
         }
     }
 }

@@ -16,5 +16,6 @@ namespace LibraryProject.Domain.Interfaces
         Task<WorkflowAction> AddAction(WorkflowAction workflowAction);
         Task SubmitBookRequestAsync(BookRequest requestDto, string userId);
         Task<bool> ApproveBookRequestAsync(int workflowActionId, int processId, string actorId, string role, bool isApproved, string comment);
+        Task<IEnumerable<Process>> GetProcess();
     }
 }
