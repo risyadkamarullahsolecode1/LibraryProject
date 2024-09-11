@@ -97,5 +97,10 @@ namespace LibraryProject.Application.Services
 
             return bytes;
         }
+
+        public async Task<Dictionary<string, int>> GetBookByCategory()
+        {
+            return await _bookRepository.GetBooksCountByCategoryAsync();
+        }
     }
 }

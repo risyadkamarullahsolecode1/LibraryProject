@@ -13,5 +13,6 @@ namespace LibraryProject.Application.Interfaces
         Task DeleteStampBook(int id, string deleteStatus);
         Task<int> GetTotalBook();
         Task<byte[]> generatereportpdf();
+        Task<Dictionary<string, int>> GetBookByCategory();
     }
 }

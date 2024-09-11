@@ -69,6 +69,8 @@ namespace LibraryProject.Infrastructure
 
             services.AddScoped<IBookBorrowRepository, BookBorrowRepository>();
             services.AddScoped<IBookBorrowService, BookBorrowService>();
+
+            services.AddScoped<IDashboardService, DashboardService>();
             return services;
         }
     }

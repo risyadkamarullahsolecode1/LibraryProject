@@ -19,12 +19,14 @@ namespace LibraryProject.Application.Services
         private readonly IUserRepository _userRepository;
         private readonly UserManager<AppUser> _userManager;
         private readonly RoleManager<IdentityRole> _roleManager;
+        private readonly IBookBorrowRepository _bookBorrowRepository;
 
-        public UserService(IUserRepository userRepository, UserManager<AppUser> userManager, RoleManager<IdentityRole> roleManager)
+        public UserService(IUserRepository userRepository, UserManager<AppUser> userManager, RoleManager<IdentityRole> roleManager, IBookBorrowRepository bookBorrowRepository)
         {
             _userRepository = userRepository;
             _userManager = userManager;
             _roleManager = roleManager;
+            _bookBorrowRepository = bookBorrowRepository;
         }
         public async Task AttachNotes(int id, string notes)
         {

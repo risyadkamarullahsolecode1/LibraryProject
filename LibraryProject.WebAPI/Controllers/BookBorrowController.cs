@@ -1,4 +1,7 @@
-﻿using LibraryProject.Application.Interfaces;
+﻿using LibraryProject.Application.Dtos;
+using LibraryProject.Application.Interfaces;
+using LibraryProject.Application.Services;
+using LibraryProject.Domain.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
 namespace LibraryProject.WebAPI.Controllers
@@ -8,10 +11,12 @@ namespace LibraryProject.WebAPI.Controllers
     public class BookBorrowController : ControllerBase
     {
         private readonly IBookBorrowService _bookBorrowService;
+        private readonly IBookBorrowRepository _bookBorrowRepository;
 
-        public BookBorrowController(IBookBorrowService bookBorrowService)
+        public BookBorrowController(IBookBorrowService bookBorrowService, IBookBorrowRepository bookBorrowRepository)
         {
             _bookBorrowService = bookBorrowService;
+            _bookBorrowRepository = bookBorrowRepository;
         }
 
         [HttpPost("borrow")]
@@ -35,11 +40,11 @@ namespace LibraryProject.WebAPI.Controllers
         }
 
         [HttpPost("return")]
-        public async Task<IActionResult> ReturnBook([FromQuery] string userId, [FromQuery] int bookId)
+        public async Task<IActionResult> ReturnBook([FromBody]ReturnBookRequest request)
         {
             try
             {
-                await _bookBorrowService.CheckInBook(userId, bookId);
+                await _bookBorrowService.CheckInBook(request.UserId, request.BookId, request.TanggalKembali);
                 return Ok("Book returned successfully.");
             }
             catch (InvalidOperationException ex)
@@ -52,6 +57,19 @@ namespace LibraryProject.WebAPI.Controllers
                 // Handle other potential exceptions
                 return StatusCode(500, "An error occurred while borrowing the book.");
             }
+        }
+        [HttpGet("overdue")]
+        public async Task<IActionResult> GetOverdue()
+        {
+            var result = await _bookBorrowRepository.GetOverdueBorrowsByUser();
+            return Ok(result);
+        }
+
+        [HttpGet("most")]
+        public async Task<IActionResult> GetActive()
+        {
+            var result = await _bookBorrowRepository.GetAll();
+            return Ok(result);
         }
     }
 }

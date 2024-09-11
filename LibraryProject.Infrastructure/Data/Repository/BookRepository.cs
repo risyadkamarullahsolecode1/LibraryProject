@@ -98,5 +98,13 @@ namespace LibraryProject.Infrastructure.Data.Repository
             var book = await _context.Books.CountAsync();
             return book;
         }
+
+        public async Task<Dictionary<string, int>> GetBooksCountByCategoryAsync()
+        {
+            return await _context.Books
+                .GroupBy(b => b.Category)
+                .Select(g => new { Category = g.Key, Count = g.Count() })
+                .ToDictionaryAsync(x => x.Category, x => x.Count);
+        }
     }
 }

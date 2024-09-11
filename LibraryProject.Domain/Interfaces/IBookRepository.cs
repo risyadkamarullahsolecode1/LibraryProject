@@ -18,5 +18,6 @@ namespace LibraryProject.Domain.Interfaces
         Task<IEnumerable<Book>> SearchBookAsync(QueryObject query, Pagination pagination);
         Task SaveChangesAsync();
         Task<int> GetTotalBooksAsync();
+        Task<Dictionary<string, int>> GetBooksCountByCategoryAsync();
     }
 }

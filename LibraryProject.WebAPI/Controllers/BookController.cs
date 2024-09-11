@@ -103,5 +103,12 @@ namespace LibraryProject.WebAPI.Controllers
             var file = await _bookService.generatereportpdf();
             return File(file, "application/pdf", Filename);
         }
+
+        [HttpGet("category")]
+        public async Task<IActionResult> GetBookByCategory()
+        {
+            var result = await _bookService.GetBookByCategory();
+            return Ok(result);
+        }
     }
 }

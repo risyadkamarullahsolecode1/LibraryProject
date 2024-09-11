@@ -246,5 +246,10 @@ namespace LibraryProject.Infrastructure.Data.Repository
 
             return user?.Email;
         }
+
+        public Task<Process> GetProcess()
+        {
+            return null; 
+        }
     }
 }
