@@ -12,5 +12,6 @@ namespace LibraryProject.Application.Dtos
         public int TotalBook { get; set; }
         public IEnumerable<BookBorrow> OverdueBooks { get; set; }
         public Dictionary<string, int> Category {  get; set; }
+        public Dictionary<string, int> ActiveMember {  get; set; }
     }
 }

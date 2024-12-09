@@ -83,5 +83,11 @@ namespace LibraryProject.Application.Services
 
             return bytes;
         }
+
+        public async Task<IEnumerable<object>> GetUserList()
+        {
+            var userList = await _userRepository.GetAllUser();
+            return userList;
+        }
     }
 }

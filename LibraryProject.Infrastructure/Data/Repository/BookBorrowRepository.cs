@@ -56,7 +56,6 @@ namespace LibraryProject.Infrastructure.Data.Repository
         {
            return await _context.BookBorrows
                 .Where(bb => bb.AppUserId == userId)
-                .Include(bb => bb.BorrowId)
                 .OrderBy(bb => bb.AppUserId)
                 .ToListAsync();
         }
@@ -96,6 +95,18 @@ namespace LibraryProject.Infrastructure.Data.Repository
             return await _context.BookBorrows.ToListAsync();
         }
 
-       
+        public async Task<IEnumerable<(string AppUserId, int BorrowCount)>> GetBorrowCountsGroupedByMemberAsync()
+        {
+            var result = await _context.BookBorrows
+            .GroupBy(b => b.AppUserId)
+            .Select(g => new { AppUserId = g.Key, BorrowCount = g.Count() })
+            .OrderByDescending(x => x.BorrowCount)
+            .Take(10) // Limit to top 10
+            .ToListAsync();
+
+            // Map to tuples after query is materialized
+            return result.Select(x => (x.AppUserId, x.BorrowCount));
+        }
+
     }
 }

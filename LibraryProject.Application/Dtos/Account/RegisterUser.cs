@@ -18,6 +18,5 @@ namespace LibraryProject.Application.Dtos.Account
         public string? Position { get; set; }
         public string? Previlege { get; set; }
         public bool? UnpaidPenalty { get; set; }
-        public string? AppUserId { get; set; }
     }
 }

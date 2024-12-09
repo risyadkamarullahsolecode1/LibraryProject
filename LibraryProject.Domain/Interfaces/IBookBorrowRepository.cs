@@ -18,5 +18,6 @@ namespace LibraryProject.Domain.Interfaces
         Task<IEnumerable<BookBorrow>> GetBorrowsByUserIdAsync(string userId);
         Task<IEnumerable<BookBorrow>> GetOverdueBorrowsByUser();
         Task<List<BookBorrow>> GetOverdueBooks();
+        Task<IEnumerable<(string AppUserId, int BorrowCount)>> GetBorrowCountsGroupedByMemberAsync();
     }
 }

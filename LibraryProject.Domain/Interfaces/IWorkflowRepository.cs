@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -10,6 +11,7 @@ namespace LibraryProject.Domain.Interfaces
     public interface IWorkflowRepository
     {
         Task<Workflow> AddWorkflow(Workflow workflow);
+        Task<Workflow?> GetFirstOrDefaultAsync(Expression<Func<Workflow, bool>> expression);
         Task<WorkflowSequence> AddWorkflowSequence(WorkflowSequence workflowSequence);
         Task<BookRequest> SubmitLeaveRequestAsync(BookRequest request);
         Task<Process> AddProcessLeaveRequest(Process process);

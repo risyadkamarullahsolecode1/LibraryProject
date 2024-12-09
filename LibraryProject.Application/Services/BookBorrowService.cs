@@ -98,15 +98,15 @@ namespace LibraryProject.Application.Services
 
             var user = userBorrow.FirstOrDefault()?.AppUserId;
 
-
             string htmlContent = $"<h1>Report for book borrow</h1>";
             htmlContent += "<table>";
             htmlContent += "<tr>" +
-                "<th>Full Name</th>" +
-                "<th>Book Title</th>" +
+                "<th>User Id</th>" +
+                "<th>Borrow Id</th>" + 
+                "<th>Book Id</th>" +
                 "<th>Date Borrowed</th>" +
                 "<th>Date Returned</th>" +
-                "<th>Days Overdue</th>" +
+                "<th>Due Date</th>" +
                 "<th>Penalty</th>" +
                 "</tr>";
 
@@ -118,12 +118,11 @@ namespace LibraryProject.Application.Services
                 htmlContent += $"<tr>" +
                                $"<td>{fullName}</td>" +
                                $"<td>{borrow.BorrowId}</td>" +
-                               $"<td>{borrow.BookId:yyyy-MM-dd}</td>" +
-                               $"<td>{borrow.DueDate:yyyy-MM-dd}</td>" +
+                               $"<td>{borrow.BookId}</td>" +
                                $"<td>{borrow.TanggalPinjam:yyyy-MM-dd}</td>" +
-                               $"<td>{borrow.DueDate:yyyy-MM-dd}</td>" +
                                $"<td>{borrow.TanggalKembali:yyyy-MM-dd}</td>" +
-                               $"<td>{borrow.Penalty:yyyy-MM-dd}</td>" +
+                               $"<td>{borrow.DueDate:yyyy-MM-dd}</td>" +
+                               $"<td>{borrow.Penalty}</td>" +
                                $"</tr>";
             }
 
@@ -136,7 +135,7 @@ namespace LibraryProject.Application.Services
                 PageSize = PageSize.A4
             };
 
-            string cssStr = File.ReadAllText(@"./Template/report/style1.css");
+            string cssStr = File.ReadAllText(@"./Template/ReportTemplates/style.css");
             CssData css = PdfGenerator.ParseStyleSheet(cssStr);
             PdfGenerator.AddPdfPages(document, htmlContent, config, css);
 
@@ -149,5 +148,10 @@ namespace LibraryProject.Application.Services
             return bytes;
         }
 
+        public async Task<IEnumerable<object>> UserBorrowReport(string userId)
+        {
+            var userBorrow = await _bookBorrowRepository.GetBorrowsByUserIdAsync(userId);
+            return userBorrow;
+        }
     }
 }

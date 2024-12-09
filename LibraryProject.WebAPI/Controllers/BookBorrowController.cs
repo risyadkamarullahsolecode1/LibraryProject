@@ -71,5 +71,23 @@ namespace LibraryProject.WebAPI.Controllers
             var result = await _bookBorrowRepository.GetAll();
             return Ok(result);
         }
+        [HttpGet("report")]
+
+        public async Task<IActionResult> Report(string userId)
+
+        {
+            var Filename = "UserReport.pdf";
+
+            var file = await _bookBorrowService.GenerateUserReportPdfAsync(userId);
+
+            return File(file, "application/pdf", Filename);
+
+        }
+        [HttpGet("borrow-report")]
+        public async Task<IActionResult> UserBorrow(string userId)
+        {
+            var res = await _bookBorrowService.UserBorrowReport(userId);
+            return Ok(res);
+        }
     }
 }

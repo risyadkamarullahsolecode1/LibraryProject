@@ -96,5 +96,11 @@ namespace LibraryProject.WebAPI.Controllers
             return File(file, "application/pdf", Filename);
 
         }
+        [HttpGet("user")]
+        public async Task<IActionResult> GetUserList()
+        {
+            var res = await _userService.GetUserList(); 
+            return Ok(res);
+        }
     }
 }

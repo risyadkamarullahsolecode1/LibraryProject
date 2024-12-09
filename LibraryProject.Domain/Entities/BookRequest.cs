@@ -13,12 +13,12 @@ namespace LibraryProject.Domain.Entities
         public int RequestId { get; set; } // Primary Key
         public string? RequestName { get; set; }
         public string? Description { get; set; }
-        public string? AppUserId { get; set; }
-        public int ProcessId { get; set; } // Foreign Key to Process
         public string? BookTitle { get; set; }
         public string? Author { get; set; }
         public string? Publisher { get; set; }
+        public int ProcessId { get; set; } // Foreign Key to Process
         public Process? Process { get; set; }
+        public string? AppUserId { get; set; }
         public AppUser? AppUser { get; set; }
     }
 }

@@ -10,5 +10,6 @@ namespace LibraryProject.Application.Interfaces
     {
         Task AttachNotes(int id, string notes);
         Task<byte[]> generatereportpdf();
+        Task<IEnumerable<object>> GetUserList();
     }
 }

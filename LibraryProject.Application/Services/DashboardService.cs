@@ -29,12 +29,18 @@ namespace LibraryProject.Application.Services
             var overduebooks = await _bookBorrowRepository.GetOverdueBorrowsByUser();
 
             var category = await _bookRepository.GetBooksCountByCategoryAsync();
+            var member = await _bookBorrowRepository.GetBorrowCountsGroupedByMemberAsync();
+
+            // Convert IEnumerable<(string, int)> to Dictionary<string, int>
+            var members = (await _bookBorrowRepository.GetBorrowCountsGroupedByMemberAsync())
+                .ToDictionary(x => x.AppUserId, x => x.BorrowCount);
 
             return new KpiReportDto
             {
                 TotalBook = totalBooks,
                 OverdueBooks = overduebooks,
-                Category = category
+                Category = category,
+                ActiveMember = members
             };
 
         }

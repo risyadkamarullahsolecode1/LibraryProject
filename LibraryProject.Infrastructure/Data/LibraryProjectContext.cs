@@ -28,66 +28,48 @@ namespace LibraryProject.Infrastructure.Data
         {
             base.OnModelCreating(modelBuilder);
 
-            modelBuilder.Entity<Workflow>()
-           .HasMany(w => w.WorkflowSequence)
-           .WithOne(ws => ws.Workflow)
-           .HasForeignKey(ws => ws.WorkflowId);
+            modelBuilder.Entity<Process>(entity =>
+            {
+                entity.HasOne(p => p.Workflow)
+                     .WithMany(w => w.Processes)
+                     .HasForeignKey(p => p.WorkflowId)
+                     .HasConstraintName("FK_Process_Workflow");
 
-            modelBuilder.Entity<WorkflowSequence>()
-                .HasOne(ws => ws.RequiredRole)
-                .WithMany()
-                .HasForeignKey(ws => ws.RequiredRoleId);
+                entity.HasOne(p => p.Requester)
+                     .WithMany(r => r.Processes)
+                     .HasForeignKey(p => p.RequesterId)
+                     .HasConstraintName("FK_Process_Requester");
+            });
+            modelBuilder.Entity<WorkflowSequence>(entity =>
+            {
+                entity.HasOne(wfs => wfs.Workflow).WithMany(w => w.WorkflowSequence)
+                     .HasForeignKey(wfs => wfs.WorkflowId)
+                     .HasConstraintName("workflow_sequence_id_workflow_fkey");
+            });
+            modelBuilder.Entity<WorkflowAction>(entity =>
+            {
+                entity.HasOne(wf => wf.Process).WithMany(p => p.WorkflowActions)
+                     .HasForeignKey(wf => wf.ProcessId)
+                     .HasConstraintName("workflow_action_id_request_fkey");
 
-            modelBuilder.Entity<Process>()
-                .HasOne(p => p.Workflow)
-                .WithMany(w => w.Processes)
-                .HasForeignKey(p => p.WorkflowId);
+                entity.HasOne(e => e.Actor).WithMany(u => u.WorkflowActions)
+                     .HasForeignKey(e => e.ActorId)
+                     .HasConstraintName("FK_WorkflowAction_User");
+            });
+            modelBuilder.Entity<NextStepRule>(entity =>
+            {
+                entity.HasOne(d => d.CurrentStep)
+                     .WithMany()
+                     .HasForeignKey(d => d.CurrentStepId)
+                     .HasConstraintName("next_step_rule_id_currentstep_fkey")
+                     .OnDelete(DeleteBehavior.Restrict);
 
-            modelBuilder.Entity<Process>()
-                .HasOne(p => p.Requester)
-                .WithMany(u => u.Processes)
-                .HasForeignKey(p => p.RequesterId);
-
-            modelBuilder.Entity<NextStepRule>()
-                .HasOne(nsr => nsr.CurrentStep)
-                .WithMany(ws => ws.NextStepRules)
-                .HasForeignKey(nsr => nsr.CurrentStepId);
-
-            modelBuilder.Entity<NextStepRule>()
-                .HasOne(nsr => nsr.NextStep)
-                .WithMany()
-                .HasForeignKey(nsr => nsr.NextStepId);
-
-            modelBuilder.Entity<BookRequest>()
-                .HasKey(lr => lr.RequestId);
-
-            modelBuilder.Entity<BookRequest>()
-                .HasOne(rb => rb.Process)
-                .WithMany(p => p.BookRequests)
-                .HasForeignKey(rb => rb.ProcessId);
-
-            modelBuilder.Entity<BookRequest>()
-                .HasOne(rb => rb.AppUser)
-                .WithMany(u => u.BookRequests)
-                .HasForeignKey(rb => rb.AppUserId);
-
-            modelBuilder.Entity<WorkflowAction>()
-                .HasOne(wa => wa.Process)
-                .WithMany(rb => rb.WorkflowActions)
-                .HasForeignKey(wa => wa.ProcessId);
-
-            modelBuilder.Entity<WorkflowAction>()
-                .HasOne(wa => wa.Step)
-                .WithMany(ws => ws.WorkflowActions)
-                .HasForeignKey(wa => wa.StepId);
-
-            modelBuilder.Entity<WorkflowAction>()
-                .HasOne(wa => wa.Actor)
-                .WithMany(u => u.WorkflowActions)
-                .HasForeignKey(wa => wa.ActorId);
-
-            modelBuilder.Entity<NextStepRule>()
-                .HasKey(lr => lr.RuleId);
+                entity.HasOne(d => d.NextStep)
+                     .WithMany()
+                     .HasForeignKey(d => d.NextStepId)
+                     .HasConstraintName("next_step_rule_id_nextstep_fkey")
+                     .OnDelete(DeleteBehavior.Restrict);
+            });
         }
     }
 }

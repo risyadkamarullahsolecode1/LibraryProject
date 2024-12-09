@@ -7,6 +7,7 @@ using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
@@ -33,6 +34,11 @@ namespace LibraryProject.Infrastructure.Data.Repository
             await _context.Workflows.AddAsync(workflow);
             await _context.SaveChangesAsync();
             return workflow;
+        }
+
+        public async Task<Workflow?> GetFirstOrDefaultAsync(Expression<Func<Workflow, bool>> expression)
+        {
+            return await _context.Workflows.FirstOrDefaultAsync(expression);
         }
 
         // add workflow sequence
