@@ -10,8 +10,10 @@ namespace LibraryProject.Application.Dtos
     public class KpiReportDto
     {
         public int TotalBook { get; set; }
-        public IEnumerable<BookBorrow> OverdueBooks { get; set; }
+        public IEnumerable<OverdueBookDto> OverdueBooks { get; set; }
         public Dictionary<string, int> Category {  get; set; }
         public Dictionary<string, int> ActiveMember {  get; set; }
+        public IEnumerable<object> WorkflowStatus { get; set; }
+        public Dictionary<string, int> TotalProcess { get; set; }
     }
 }

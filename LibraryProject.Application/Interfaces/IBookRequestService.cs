@@ -13,5 +13,6 @@ namespace LibraryProject.Application.Interfaces
         Task<BaseResponseDto> ReviewJobPostRequest(ReviewRequestDto reviewRequest);
         Task<IEnumerable<object>> GetAllBookRequestStatuses();
         Task<ProcessDetailDto> GetProcessAsync(int processId);
+        Task<Dictionary<string, int>> CountStatusesByRole();
     }
 }

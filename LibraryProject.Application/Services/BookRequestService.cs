@@ -332,5 +332,64 @@ namespace LibraryProject.Application.Services
 
             return processDetailDto; // Return the DTO instead of the entity
         }
+
+        public async Task<Dictionary<string, int>> CountStatusesByRole()
+        {
+            // Get user and roles from HttpContextAccessor
+            var userName = _httpContextAccessor.HttpContext?.User.Identity?.Name;
+            if (string.IsNullOrEmpty(userName))
+            {
+                throw new UnauthorizedAccessException("User not authenticated.");
+            }
+
+            var user = await _userManager.FindByNameAsync(userName);
+            if (user == null)
+            {
+                throw new InvalidOperationException("User not found.");
+            }
+
+            var userRoles = await _userManager.GetRolesAsync(user);
+
+            // Dictionary to hold counts of statuses per role
+            var roleStatusCount = new Dictionary<string, int>();
+
+            foreach (var role in userRoles)
+            {
+                var applications = new List<BookRequest>();
+
+                // Fetch book requests based on the user's role
+                if (role == "Library User")
+                {
+                    // Fetch book requests created by the user (RequesterId)
+                    var userApplications = await _bookRequestRepository.GetAllByUserAsync(r => r.AppUserId == user.Id);
+                    applications.AddRange(userApplications);
+                }
+                else if (role == "Librarian" || role == "Library Manager")
+                {
+                    // Fetch book requests assigned to the role (based on the workflow step)
+                    var roleApplications = await _bookRequestRepository.GetAllToStatusAsync(role);
+                    applications.AddRange(roleApplications);
+                }
+
+                // Count statuses for the current role
+                foreach (var app in applications)
+                {
+                    // Get the status of the current application process
+                    var status = app.Process?.Status ?? "No Status";
+
+                    // If the status doesn't already exist in the dictionary, initialize it
+                    if (!roleStatusCount.ContainsKey(status))
+                    {
+                        roleStatusCount[status] = 0;
+                    }
+
+                    // Increment the count for the specific status
+                    roleStatusCount[status]++;
+                }
+            }
+
+            return roleStatusCount;
+        }
+
     }
 }

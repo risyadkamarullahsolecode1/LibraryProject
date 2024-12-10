@@ -14,19 +14,23 @@ namespace LibraryProject.Application.Services
         private readonly IBookRepository _bookRepository;
         private readonly IUserRepository _userRepository;
         private readonly IBookBorrowRepository _bookBorrowRepository;
+        private readonly IBookRequestService _bookRequestService;
+        private readonly IBookBorrowService _bookBorrowService;
 
-        public DashboardService(IBookRepository bookRepository, IUserRepository userRepository, IBookBorrowRepository bookBorrowRepository)
+        public DashboardService(IBookRepository bookRepository, IUserRepository userRepository, IBookBorrowRepository bookBorrowRepository, IBookRequestService bookRequestService, IBookBorrowService bookBorrowService)
         {
             _bookRepository = bookRepository;
             _userRepository = userRepository;
             _bookBorrowRepository = bookBorrowRepository;
+            _bookRequestService = bookRequestService;
+            _bookBorrowService = bookBorrowService;
         }
 
         public async Task<KpiReportDto> GetReport()
         {
             var totalBooks = await _bookRepository.GetTotalBooksAsync();
 
-            var overduebooks = await _bookBorrowRepository.GetOverdueBorrowsByUser();
+            var overduebooks = await _bookBorrowService.GetOverdueBorrowsByUser();
 
             var category = await _bookRepository.GetBooksCountByCategoryAsync();
             var member = await _bookBorrowRepository.GetBorrowCountsGroupedByMemberAsync();
@@ -35,12 +39,17 @@ namespace LibraryProject.Application.Services
             var members = (await _bookBorrowRepository.GetBorrowCountsGroupedByMemberAsync())
                 .ToDictionary(x => x.AppUserId, x => x.BorrowCount);
 
+            var workflow = await _bookRequestService.GetAllBookRequestStatuses();
+            var process = await _bookRequestService.CountStatusesByRole();
+
             return new KpiReportDto
             {
                 TotalBook = totalBooks,
                 OverdueBooks = overduebooks,
                 Category = category,
-                ActiveMember = members
+                ActiveMember = members,
+                WorkflowStatus = workflow,
+                TotalProcess = process,
             };
 
         }

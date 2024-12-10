@@ -153,5 +153,20 @@ namespace LibraryProject.Application.Services
             var userBorrow = await _bookBorrowRepository.GetBorrowsByUserIdAsync(userId);
             return userBorrow;
         }
+        public async Task<IEnumerable<OverdueBookDto>> GetOverdueBorrowsByUser()
+        {
+            var overdue =  await _bookBorrowRepository.GetOverdueBorrowsByUser();
+
+            var overdueDto = overdue.Select(b => new OverdueBookDto
+                {
+                    BookTitle = b.Book?.Title,
+                    BorrowId = b.BorrowId,
+                    UserName = b.AppUser?.UserName,
+                    DueDate = b.DueDate,
+                    Penalty = b.Penalty,
+                }
+            );
+            return overdueDto;
+        }
     }
 }

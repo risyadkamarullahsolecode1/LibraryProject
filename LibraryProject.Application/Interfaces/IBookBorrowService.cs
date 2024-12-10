@@ -17,5 +17,6 @@ namespace LibraryProject.Application.Interfaces
         //Task<List<OverdueBook>> GetOverdueBooks();
         Task<byte[]> GenerateUserReportPdfAsync(string userId);
         Task<IEnumerable<object>> UserBorrowReport(string userId);
+        Task<IEnumerable<OverdueBookDto>> GetOverdueBorrowsByUser();
     }
 }
